@@ -14,7 +14,8 @@ import {
 import { 
   subscribeToUserEntries, 
   deleteJournalEntry, 
-  updateJournalEntry 
+  updateJournalEntry,
+  getNotificationConfig
 } from './lib/firestore';
 import { UserProfile, JournalEntry, AppTab } from './types';
 import { LandingPage } from './components/LandingPage';
@@ -26,6 +27,9 @@ import { ThreatModelModal } from './components/ThreatModelModal';
 import { AnalyticsDashboard } from './components/AnalyticsDashboard';
 import { GuidedExerciseModal } from './components/GuidedExerciseModal';
 import { ExportModal } from './components/ExportModal';
+import { MindsetAtlas } from './components/MindsetAtlas';
+import { AdminDashboard } from './components/AdminDashboard';
+import { NotificationModal } from './components/NotificationModal';
 import { AlertCircle, CheckCircle, Sparkles } from 'lucide-react';
 
 export default function App() {
@@ -43,6 +47,7 @@ export default function App() {
   const [isThreatModalOpen, setIsThreatModalOpen] = useState<boolean>(false);
   const [isGuidedModalOpen, setIsGuidedModalOpen] = useState<boolean>(false);
   const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false);
+  const [isNotificationModalOpen, setIsNotificationModalOpen] = useState<boolean>(false);
 
   // Feedback notifications
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
@@ -118,6 +123,32 @@ export default function App() {
   const handleEntrySaved = (saved: JournalEntry) => {
     setActiveEntry(saved);
     showNotification('success', 'Reflection successfully saved.');
+
+    // Check background notification trigger if configured
+    if (currentUser) {
+      getNotificationConfig(currentUser.uid).then((cfg) => {
+        if (cfg && cfg.enabled && cfg.webhookUrl) {
+          const hasActions = Boolean(cfg.triggers?.onActionItemsExtracted && saved.actionItems && saved.actionItems.length > 0);
+          const hasAnxiety = Boolean(cfg.triggers?.onHighAnxietyAlert && saved.mood === 'anxious');
+          if (hasActions || hasAnxiety) {
+            fetch('/api/notifications/dispatch', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                webhookUrl: cfg.webhookUrl,
+                eventType: hasActions ? 'action_items' : 'high_anxiety',
+                title: hasActions ? `New Action Items Extracted: ${saved.title}` : `Emotional Balance Alert: ${saved.title}`,
+                summary: saved.content.slice(0, 160) + (saved.content.length > 160 ? '...' : ''),
+                details: saved.actionItems || [],
+                mood: saved.mood,
+                locationName: saved.location?.placeName,
+                timestamp: saved.createdAt,
+              }),
+            }).catch(e => console.warn('Background webhook dispatch non-fatal failure:', e));
+          }
+        }
+      }).catch(e => console.warn('Notification config check error:', e));
+    }
   };
 
   const handleTogglePin = async (entry: JournalEntry) => {
@@ -218,6 +249,7 @@ export default function App() {
         onOpenThreatModel={() => setIsThreatModalOpen(true)}
         onOpenGuidedExercises={() => setIsGuidedModalOpen(true)}
         onOpenExport={() => setIsExportModalOpen(true)}
+        onOpenNotifications={() => setIsNotificationModalOpen(true)}
       />
 
       {/* Floating Notification Toast */}
@@ -242,7 +274,7 @@ export default function App() {
 
       {/* Main Workspace Layout */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {activeTab === 'journal' ? (
+        {activeTab === 'journal' && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start animate-in fade-in duration-200">
             {/* Left / Main Column: Multi-Turn Journal Editor & AI Partner (7 cols on lg) */}
             <section className="lg:col-span-7 w-full">
@@ -274,13 +306,31 @@ export default function App() {
               />
             </section>
           </div>
-        ) : (
+        )}
+
+        {activeTab === 'analytics' && (
           <AnalyticsDashboard
             entries={entries}
             onOpenEntry={(entry) => {
               setActiveEntry(entry);
               setActiveTab('journal');
             }}
+          />
+        )}
+
+        {activeTab === 'atlas' && (
+          <MindsetAtlas
+            entries={entries}
+            onOpenEntry={(entry) => {
+              setActiveEntry(entry);
+              setActiveTab('journal');
+            }}
+          />
+        )}
+
+        {activeTab === 'admin' && (
+          <AdminDashboard
+            user={currentUser}
           />
         )}
       </main>
@@ -309,6 +359,12 @@ export default function App() {
         isOpen={isExportModalOpen}
         onClose={() => setIsExportModalOpen(false)}
         entries={entries}
+      />
+
+      <NotificationModal
+        isOpen={isNotificationModalOpen}
+        onClose={() => setIsNotificationModalOpen(false)}
+        userId={currentUser.uid}
       />
 
       <ThreatModelModal

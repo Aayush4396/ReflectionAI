@@ -201,3 +201,59 @@ Below are the step-by-step verification procedures covering every user interacti
 4. Click **"Download JSON Archive"**. Verify a structured `.json` backup file is downloaded containing complete metadata, message histories, and timestamps.
 5. Click **"Download Markdown Archive"**. Verify an organized `.md` file is downloaded, formatted with table of contents and headings for reading in Obsidian, Notion, or local text editors.
 
+---
+
+## 🤖 Antigravity Developer Environment & Localized Skills
+
+ReflectAI is organized with localized Antigravity skills under `.agents/skills/`:
+
+| Localized Skill | Path | Description |
+| :--- | :--- | :--- |
+| **Location-Aware Journaling** | `.agents/skills/location-aware-journaling/SKILL.md` | Dual-key proxy architecture, coordinate boundary validation ($-90 \le \text{lat} \le 90$, $-180 \le \text{lng} \le 180$), and opt-in user privacy. |
+| **RBAC & Security Architecture** | `.agents/skills/rbac-and-security/SKILL.md` | Role hierarchy (`user`, `moderator`, `admin`), fail-closed authorization boundaries, and immutable audit logs. |
+| **External Notifications** | `.agents/skills/external-notifications/SKILL.md` | SSRF defense against loopback/metadata/private subnets, platform schemas (Discord/Slack), and rate limiting. |
+| **TDD & Security Testing** | `.agents/skills/tdd-and-security-testing/SKILL.md` | Test-driven development methodologies, automated security regression suites, and pre-deploy verification. |
+
+---
+
+## 🧪 Test-Driven Development (TDD) Test Suites
+
+The project includes 5 automated test suites located in `/tests/` executed via a unified runner:
+
+```bash
+# Run all TDD test suites
+npm test
+
+# Run comprehensive security & static analysis audit
+npm run test:security
+```
+
+### Automated Test Coverage:
+1. **SSRF Defense (`tests/security-ssrf.test.ts`)**: Tests rejection of HTTP protocol, loopback (`localhost`, `127.0.0.1`), cloud metadata (`169.254.169.254`), and private subnets (`10.x.x.x`, `192.168.x.x`).
+2. **Coordinates Validation (`tests/coordinates-validation.test.ts`)**: Tests boundary enforcement on latitude and longitude, precision formatting, and string parsing.
+3. **RBAC & Audits (`tests/rbac-auth.test.ts`)**: Tests fail-closed behavior for unauthorized users and verifies schema compliance on audit log entries.
+4. **Payload Hygiene (`tests/payload-hygiene.test.ts`)**: Tests recursive undefined-stripping on nested objects and arrays for zero-crash database persistence.
+5. **Gemini Fallback Ladder (`tests/gemini-fallback.test.ts`)**: Tests resilience and sequential failover across all 5 model tiers (`gemini-3.6-flash` &rarr; `gemini-3.1-flash-lite` &rarr; `gemini-flash-latest` &rarr; `gemini-3.8-flash` &rarr; `gemini-3.7-flash`).
+
+---
+
+## 🪝 Automated Pre-Deploy Git Hooks
+
+Git hooks are configured under `.githooks/` to automatically run security tests before redeploying to Google Cloud Run:
+
+### 1. Setup / Enable Git Hooks
+```bash
+npm run prepare:hooks
+# or: git config core.hooksPath .githooks
+```
+
+### 2. Hook Execution Triggers
+- **`pre-commit`**: Automatically scans staged changes for leaked API keys, runs `tsc --noEmit` typechecking, and runs the fast TDD test suites before allowing a commit.
+- **`pre-push`**: Runs the complete pre-deployment verification script (`scripts/pre-deploy-check.sh`), validating security rules, running full regression tests, and compiling the production bundle (`npm run build`) before allowing a push or redeploy.
+
+### 3. Manual Pre-Deploy Verification
+```bash
+npm run predeploy
+```
+
+

@@ -1,8 +1,19 @@
+export type UserRole = 'user' | 'moderator' | 'admin';
+
 export interface UserProfile {
   uid: string;
   email: string | null;
   displayName: string | null;
   photoURL: string | null;
+  role?: UserRole;
+}
+
+export interface LocationPin {
+  lat: number;
+  lng: number;
+  address: string;
+  placeName?: string;
+  city?: string;
 }
 
 export type ReflectionMode = 'socratic' | 'summary' | 'brainstorm' | 'action_items' | 'empathy';
@@ -22,6 +33,7 @@ export interface JournalEntry {
   content: string; // Initial reflection or current draft
   mood?: 'peaceful' | 'energized' | 'thoughtful' | 'anxious' | 'neutral' | 'grateful';
   tags: string[];
+  location?: LocationPin;
   messages: EntryMessage[];
   summary?: string;
   actionItems?: string[];
@@ -45,7 +57,7 @@ export interface GeminiReflectResponse {
   modelUsed: string;
 }
 
-export type AppTab = 'journal' | 'analytics';
+export type AppTab = 'journal' | 'analytics' | 'atlas' | 'admin';
 
 export interface TrendSynthesisRequest {
   timeframe: '7days' | '30days' | 'all';
@@ -141,3 +153,50 @@ export interface ExerciseAssistantResponse {
   cognitiveDistortionsDetected?: string[];
   modelUsed: string;
 }
+
+export interface NotificationConfig {
+  webhookUrl: string;
+  channelName?: string;
+  enabled: boolean;
+  triggers: {
+    onActionItemsExtracted: boolean;
+    onHighAnxietyAlert: boolean;
+    onWeeklyMilestone: boolean;
+  };
+}
+
+export interface NotificationDispatchPayload {
+  webhookUrl?: string;
+  eventType: 'action_items' | 'anxiety_alert' | 'streak_milestone' | 'test_ping';
+  title: string;
+  summary: string;
+  details?: string[];
+  mood?: string;
+  locationName?: string;
+  timestamp: string;
+}
+
+export interface AuditLogItem {
+  id: string;
+  timestamp: string;
+  operatorEmail: string;
+  action: string;
+  category: 'security' | 'telemetry' | 'notification' | 'rbac';
+  status: 'success' | 'warning' | 'error';
+  details?: string;
+}
+
+export interface SystemHealthMetrics {
+  geminiLadderStatus: Array<{
+    model: string;
+    tier: string;
+    latencyMs: number;
+    status: 'operational' | 'degraded' | 'standby';
+  }>;
+  averageLatencyMs: number;
+  activeUsersCount: number;
+  totalJournalEntriesCount: number;
+  securityAuditsTodayCount: number;
+  lastRuleDeployment: string;
+}
+

@@ -2,12 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import { 
   JournalEntry, 
   EntryMessage, 
-  ReflectionMode 
+  ReflectionMode,
+  LocationPin
 } from '../types';
 import { askGeminiReflection } from '../lib/gemini-client';
 import { saveJournalEntry } from '../lib/firestore';
 import { VoiceRecorder } from './VoiceRecorder';
 import { ActionPlanner } from './ActionPlanner';
+import { LocationPicker } from './LocationPicker';
 import Markdown from 'react-markdown';
 import { 
   Send, 
@@ -79,6 +81,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
   const [isPinned, setIsPinned] = useState<boolean>(activeEntry?.isPinned || false);
   const [selectedMode, setSelectedMode] = useState<ReflectionMode>('socratic');
   const [actionItems, setActionItems] = useState<string[]>(activeEntry?.actionItems || []);
+  const [location, setLocation] = useState<LocationPin | undefined>(activeEntry?.location);
   const [showVoiceRecorder, setShowVoiceRecorder] = useState<boolean>(false);
   
   // Multi-turn conversation state
@@ -101,6 +104,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
       setContent(activeEntry.content || '');
       setMood(activeEntry.mood || 'thoughtful');
       setTags(activeEntry.tags || []);
+      setLocation(activeEntry.location);
       setIsPinned(Boolean(activeEntry.isPinned));
       setActionItems(activeEntry.actionItems || []);
       setMessages(activeEntry.messages || []);
@@ -111,6 +115,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
       setContent('');
       setMood('thoughtful');
       setTags(['Reflection']);
+      setLocation(undefined);
       setIsPinned(false);
       setActionItems([]);
       setMessages([]);
@@ -153,6 +158,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
         content,
         mood,
         tags,
+        location,
         messages: updatedMessages || messages,
         actionItems: newActionItems !== undefined ? newActionItems : actionItems,
         isPinned,
@@ -302,6 +308,11 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
               <span className="hidden sm:inline">Guided Frameworks</span>
             </button>
           )}
+
+          <LocationPicker 
+            location={location} 
+            onChangeLocation={setLocation} 
+          />
 
           <button
             id="btn-toggle-voice"

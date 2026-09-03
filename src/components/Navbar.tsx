@@ -10,7 +10,10 @@ import {
   TrendingUp, 
   PenTool,
   Compass,
-  Archive
+  Archive,
+  Globe,
+  ShieldAlert,
+  Bell
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -23,6 +26,7 @@ interface NavbarProps {
   onOpenThreatModel: () => void;
   onOpenGuidedExercises?: () => void;
   onOpenExport?: () => void;
+  onOpenNotifications?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -35,6 +39,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenThreatModel,
   onOpenGuidedExercises,
   onOpenExport,
+  onOpenNotifications,
 }) => {
   return (
     <header className="sticky top-0 z-30 bg-slate-900/90 text-slate-100 border-b border-slate-800 backdrop-blur-xl shadow-lg shadow-black/20">
@@ -86,6 +91,36 @@ export const Navbar: React.FC<NavbarProps> = ({
               <TrendingUp className="w-3.5 h-3.5" />
               <span>Analytics</span>
             </button>
+
+            <button
+              id="tab-btn-atlas"
+              type="button"
+              onClick={() => onChangeTab('atlas')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
+                activeTab === 'atlas'
+                  ? 'bg-cyan-600 text-white shadow-xs shadow-cyan-600/30'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+              }`}
+              title="Geographic Mindset Atlas"
+            >
+              <Globe className="w-3.5 h-3.5" />
+              <span>Atlas</span>
+            </button>
+
+            <button
+              id="tab-btn-admin"
+              type="button"
+              onClick={() => onChangeTab('admin')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
+                activeTab === 'admin'
+                  ? 'bg-rose-600 text-white shadow-xs shadow-rose-600/30'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+              }`}
+              title="System Admin & RBAC Telemetry"
+            >
+              <ShieldAlert className="w-3.5 h-3.5" />
+              <span>Admin</span>
+            </button>
           </nav>
         </div>
 
@@ -113,6 +148,19 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               <Archive className="w-3.5 h-3.5 text-slate-400" />
               <span>Export</span>
+            </button>
+          )}
+
+          {onOpenNotifications && (
+            <button
+              id="btn-nav-notifications"
+              type="button"
+              onClick={onOpenNotifications}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-300 bg-slate-800/80 hover:bg-slate-700 border border-slate-700/60 rounded-xl transition-all cursor-pointer shadow-xs"
+              title="External Webhook Notifications (Slack/Discord)"
+            >
+              <Bell className="w-3.5 h-3.5 text-amber-400" />
+              <span>Alerts</span>
             </button>
           )}
 

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -e
+
+echo "🚀 [Git Hook: pre-push] Running pre-deployment verification for Cloud Run..."
+
+# Run full pre-deploy verification
+bash ./scripts/pre-deploy-check.sh
+
+echo "✅ [Git Hook: pre-push] Verification successful! Cloud Run redeployment permitted."
+exit 0

@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -e
+
+echo "🔍 [Git Hook: pre-commit] Running security & syntax checks..."
+
+# Check for hardcoded API keys in staged files
+LEAKS=$(git diff --cached -- ':!firebase-applet-config.json' | grep -nEI "AIza[0-9A-Za-z_-]{35}|sk-[a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{20,}" || true)
+if [ -n "$LEAKS" ]; then
+  echo "❌ PRE-COMMIT REJECTED: Potential API key or secret token in staged changes:"
+  echo "$LEAKS"
+  exit 1
+fi
+
+# Run TypeScript typecheck
+npm run lint
+
+# Run TDD test suites
+npx tsx tests/run-all-tests.ts
+
+echo "✅ [Git Hook: pre-commit] All pre-commit security gates passed!"
+exit 0

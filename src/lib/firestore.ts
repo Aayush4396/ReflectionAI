@@ -8,7 +8,8 @@ import {
   query, 
   orderBy, 
   serverTimestamp,
-  getDocs
+  getDocs,
+  getDoc
 } from 'firebase/firestore';
 import { db } from './firebase';
 import { JournalEntry } from '../types';
@@ -78,6 +79,7 @@ export function subscribeToUserEntries(
             content: data.content || '',
             mood: data.mood,
             tags: data.tags || [],
+            location: data.location || undefined,
             messages: data.messages || [],
             summary: data.summary,
             actionItems: data.actionItems || [],
@@ -117,6 +119,7 @@ export async function saveJournalEntry(userId: string, entry: Partial<JournalEnt
     content: entry.content || '',
     mood: entry.mood,
     tags: entry.tags || [],
+    location: entry.location || undefined,
     messages: entry.messages || [],
     summary: entry.summary,
     actionItems: entry.actionItems || [],
@@ -164,3 +167,57 @@ export async function deleteJournalEntry(userId: string, entryId: string): Promi
   const docRef = doc(db, 'users', userId, 'entries', entryId);
   await deleteDoc(docRef);
 }
+
+/**
+ * Save Notification Configuration
+ */
+export async function saveNotificationConfig(userId: string, config: any): Promise<void> {
+  if (!userId) return;
+  const docRef = doc(db, 'users', userId, 'notifications', 'config');
+  await setDoc(docRef, sanitizePayload({
+    ...config,
+    updatedAt: new Date().toISOString()
+  }), { merge: true });
+}
+
+/**
+ * Retrieve Notification Configuration
+ */
+export async function getNotificationConfig(userId: string): Promise<any | null> {
+  if (!userId) return null;
+  try {
+    const docRef = doc(db, 'users', userId, 'notifications', 'config');
+    const snap = await getDoc(docRef);
+    if (snap.exists()) {
+      return snap.data();
+    }
+    return null;
+  } catch (err) {
+    console.warn('Failed to fetch notification config:', err);
+    return null;
+  }
+}
+
+/**
+ * Record an audit log for administrative oversight
+ */
+export async function recordAuditLog(log: {
+  operatorEmail: string;
+  action: string;
+  category: 'security' | 'telemetry' | 'notification' | 'rbac';
+  status: 'success' | 'warning' | 'error';
+  details?: string;
+}): Promise<void> {
+  try {
+    const logId = crypto.randomUUID();
+    const docRef = doc(db, 'system_audit_logs', logId);
+    await setDoc(docRef, sanitizePayload({
+      id: logId,
+      ...log,
+      timestamp: new Date().toISOString(),
+    }));
+  } catch (err) {
+    console.warn('Audit log write error (swallowed to avoid breaking client):', err);
+  }
+}
+

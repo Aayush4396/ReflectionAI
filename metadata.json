@@ -1,8 +1,9 @@
 {
-  "name": "ReflectAI - Journal & AI Reflection Assistant",
+  "name": "ReflectAI",
   "description": "User-authenticated personal journaling platform with voice audio memo transcription, multi-turn AI reflections, action plan extraction, and real-time Firestore security.",
   "requestFramePermissions": [
-    "microphone"
+    "microphone",
+    "geolocation"
   ],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

@@ -1,0 +1,52 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  annotations:
+    run.googleapis.com/ingress: all
+    run.googleapis.com/ingress-status: all
+  labels:
+    cloud.googleapis.com/location: asia-southeast1
+  name: reflectai-journal-ai-reflection-assistant
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: '10'
+        autoscaling.knative.dev/minScale: '0'
+        run.googleapis.com/cpu-throttling: 'true'
+        run.googleapis.com/sessionAffinity: 'true'
+    spec:
+      containerConcurrency: 1000
+      containers:
+      - env:
+        - name: SQL_DB_NAME
+          value: cloud_sql_production_database
+        - name: NOTIFICATION_WEBHOOK_URL
+          value: https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK
+        - name: VITE_GOOGLE_MAPS_API_KEY
+          value: YOUR_GOOGLE_MAPS_API_KEY
+        - name: ADMIN_SECRET_KEY
+          value: YOUR_ADMIN_SECRET_KEY
+        - name: GEMINI_API_KEY
+          value: YOUR_GEMINI_API_KEY
+        - name: APP_URL
+          value: https://YOUR_APP_URL.run.app
+        image: asia-southeast1-docker.pkg.dev/YOUR_PROJECT_ID/cloud-run-source-deploy/reflectai:latest
+        name: app-container
+        ports:
+        - containerPort: 8080
+          name: http1
+        resources:
+          limits:
+            cpu: '1'
+            memory: 3Gi
+        startupProbe:
+          failureThreshold: 15
+          periodSeconds: 2
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 2
+      timeoutSeconds: 300
+  traffic:
+  - latestRevision: true
+    percent: 100

@@ -8,3 +8,5 @@ coverage/
 !.env.example
 firebase-applet-config.json
 !firebase-applet-config.example.json
+service.yaml
+!service.template.yaml

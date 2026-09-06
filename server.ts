@@ -30,11 +30,11 @@ function getGenAI(): GoogleGenAI {
 
 // Resilient Model Fallback Ladder (ordered by availability and latency per directive)
 const MODEL_LADDER = [
-  'gemini-3.6-flash',
   'gemini-3.1-flash-lite',
   'gemini-flash-latest',
-  'gemini-3.8-flash',
   'gemini-3.7-flash',
+  'gemini-3.8-flash',
+  'gemini-3.6-flash',
 ];
 
 /**
@@ -49,15 +49,21 @@ async function generateContentWithFallback(params: {
 
   for (const modelName of MODEL_LADDER) {
     try {
+      const config: any = {
+        temperature: 0.7,
+        maxOutputTokens: 1200,
+      };
+      if (params.systemInstruction) {
+        config.systemInstruction = params.systemInstruction;
+      }
+      if (modelName === 'gemini-3.6-flash') {
+        config.thinkingConfig = { thinkingBudget: 128 };
+      }
+
       const response = await ai.models.generateContent({
         model: modelName,
         contents: params.contents,
-        config: params.systemInstruction ? {
-          systemInstruction: params.systemInstruction,
-          temperature: 0.7,
-        } : {
-          temperature: 0.7,
-        },
+        config,
       });
 
       if (response && response.text) {

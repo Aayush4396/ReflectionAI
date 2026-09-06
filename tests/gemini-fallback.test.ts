@@ -1,14 +1,15 @@
 /**
  * Test Suite: Gemini Model Fallback Ladder Order & Resilience
  * Validates resilience against 503, 429, 404, and 500 status codes.
+ * Optimized for low-latency sub-4s conversational response times.
  */
 
 export const GEMINI_LADDER = [
-  'gemini-3.6-flash',
   'gemini-3.1-flash-lite',
   'gemini-flash-latest',
-  'gemini-3.8-flash',
   'gemini-3.7-flash',
+  'gemini-3.8-flash',
+  'gemini-3.6-flash',
 ] as const;
 
 export interface MockGenerationResult {
@@ -39,79 +40,79 @@ export async function runGeminiFallbackTests(): Promise<{ passed: number; failed
   let passed = 0;
   let failed = 0;
 
-  // Test 1: Primary succeeds on first attempt
+  // Test 1: Ultra-fast Primary succeeds on first attempt
   try {
     const res1 = await simulateModelLadderExecution([]);
-    if (res1.modelUsed === 'gemini-3.6-flash' && res1.attempts === 1) {
+    if (res1.modelUsed === 'gemini-3.1-flash-lite' && res1.attempts === 1) {
       passed++;
-      results.push({ name: 'Primary model executes immediately when healthy', ok: true });
+      results.push({ name: 'Ultra-fast primary model (gemini-3.1-flash-lite) executes immediately when healthy', ok: true });
     } else {
       failed++;
-      results.push({ name: 'Primary model executes immediately when healthy', ok: false, message: `Unexpected: ${JSON.stringify(res1)}` });
+      results.push({ name: 'Ultra-fast primary model executes immediately when healthy', ok: false, message: `Unexpected: ${JSON.stringify(res1)}` });
     }
   } catch (err: any) {
     failed++;
-    results.push({ name: 'Primary model executes immediately when healthy', ok: false, message: err.message });
+    results.push({ name: 'Ultra-fast primary model executes immediately when healthy', ok: false, message: err.message });
   }
 
-  // Test 2: Primary fails (429/503), falls back to second tier (flash-lite)
+  // Test 2: Primary fails (429/503), falls back to second tier (gemini-flash-latest)
   try {
-    const res2 = await simulateModelLadderExecution(['gemini-3.6-flash']);
-    if (res2.modelUsed === 'gemini-3.1-flash-lite' && res2.attempts === 2) {
+    const res2 = await simulateModelLadderExecution(['gemini-3.1-flash-lite']);
+    if (res2.modelUsed === 'gemini-flash-latest' && res2.attempts === 2) {
       passed++;
-      results.push({ name: 'Recovers cleanly to gemini-3.1-flash-lite on primary failure', ok: true });
+      results.push({ name: 'Recovers cleanly to gemini-flash-latest on primary failure', ok: true });
     } else {
       failed++;
-      results.push({ name: 'Recovers cleanly to gemini-3.1-flash-lite on primary failure', ok: false, message: `Unexpected: ${JSON.stringify(res2)}` });
+      results.push({ name: 'Recovers cleanly to gemini-flash-latest on primary failure', ok: false, message: `Unexpected: ${JSON.stringify(res2)}` });
     }
   } catch (err: any) {
     failed++;
-    results.push({ name: 'Recovers cleanly to gemini-3.1-flash-lite on primary failure', ok: false, message: err.message });
+    results.push({ name: 'Recovers cleanly to gemini-flash-latest on primary failure', ok: false, message: err.message });
   }
 
-  // Test 3: First two fail, falls back to dynamic alias (gemini-flash-latest)
+  // Test 3: First two fail, falls back to gemini-3.7-flash
   try {
-    const res3 = await simulateModelLadderExecution(['gemini-3.6-flash', 'gemini-3.1-flash-lite']);
-    if (res3.modelUsed === 'gemini-flash-latest' && res3.attempts === 3) {
+    const res3 = await simulateModelLadderExecution(['gemini-3.1-flash-lite', 'gemini-flash-latest']);
+    if (res3.modelUsed === 'gemini-3.7-flash' && res3.attempts === 3) {
       passed++;
-      results.push({ name: 'Recovers to gemini-flash-latest after dual tier exhaustion', ok: true });
+      results.push({ name: 'Recovers to gemini-3.7-flash after dual tier exhaustion', ok: true });
     } else {
       failed++;
-      results.push({ name: 'Recovers to gemini-flash-latest after dual tier exhaustion', ok: false, message: `Unexpected: ${JSON.stringify(res3)}` });
+      results.push({ name: 'Recovers to gemini-3.7-flash after dual tier exhaustion', ok: false, message: `Unexpected: ${JSON.stringify(res3)}` });
     }
   } catch (err: any) {
     failed++;
-    results.push({ name: 'Recovers to gemini-flash-latest after dual tier exhaustion', ok: false, message: err.message });
+    results.push({ name: 'Recovers to gemini-3.7-flash after dual tier exhaustion', ok: false, message: err.message });
   }
 
-  // Test 4: Traverses through to deep reasoning tier (gemini-3.7-flash)
+  // Test 4: Traverses through to deep reasoning tier (gemini-3.6-flash)
   try {
     const res4 = await simulateModelLadderExecution([
-      'gemini-3.6-flash',
       'gemini-3.1-flash-lite',
       'gemini-flash-latest',
+      'gemini-3.7-flash',
       'gemini-3.8-flash',
     ]);
-    if (res4.modelUsed === 'gemini-3.7-flash' && res4.attempts === 5) {
+    if (res4.modelUsed === 'gemini-3.6-flash' && res4.attempts === 5) {
       passed++;
-      results.push({ name: 'Deep reasoning tier gemini-3.7-flash catches severe outages', ok: true });
+      results.push({ name: 'Deep reasoning tier gemini-3.6-flash catches severe outages', ok: true });
     } else {
       failed++;
-      results.push({ name: 'Deep reasoning tier gemini-3.7-flash catches severe outages', ok: false, message: `Unexpected: ${JSON.stringify(res4)}` });
+      results.push({ name: 'Deep reasoning tier gemini-3.6-flash catches severe outages', ok: false, message: `Unexpected: ${JSON.stringify(res4)}` });
     }
   } catch (err: any) {
     failed++;
-    results.push({ name: 'Deep reasoning tier gemini-3.7-flash catches severe outages', ok: false, message: err.message });
+    results.push({ name: 'Deep reasoning tier gemini-3.6-flash catches severe outages', ok: false, message: err.message });
   }
 
   // Test 5: Exhaustion throws explicit escalation error
   try {
     await simulateModelLadderExecution([
-      'gemini-3.6-flash',
       'gemini-3.1-flash-lite',
       'gemini-flash-latest',
-      'gemini-3.8-flash',
       'gemini-3.7-flash',
+      'gemini-3.8-flash',
+      'gemini-3.6-flash',
     ]);
     failed++;
     results.push({ name: 'Throws descriptive escalation error when all ladder models fail', ok: false, message: 'Should have thrown' });

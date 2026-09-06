@@ -107,13 +107,10 @@ export const MindsetAtlas: React.FC<MindsetAtlasProps> = ({
             </div>
             <div>
               <h1 className="text-lg font-bold text-white flex items-center gap-2">
-                <span>Mindset Atlas & Geo-Journal</span>
-                <span className="px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider bg-cyan-950/80 text-cyan-300 rounded-md border border-cyan-800/60">
-                  Google Maps Platform
-                </span>
+                <span>Places &amp; Memories</span>
               </h1>
               <p className="text-xs text-slate-400">
-                Explore how your physical environment and settings correlate with emotional clarity and cognitive headspace.
+                See how the places you visit, travel to, and spend time in shape your thoughts, headspace, and mood.
               </p>
             </div>
           </div>
@@ -121,7 +118,7 @@ export const MindsetAtlas: React.FC<MindsetAtlasProps> = ({
           {/* Quick Metrics */}
           <div className="flex items-center gap-3">
             <div className="px-3 py-1.5 bg-slate-950/80 rounded-xl border border-slate-800 text-right">
-              <span className="text-[10px] uppercase font-semibold text-slate-400 block">Geo-Tagged Entries</span>
+              <span className="text-[10px] uppercase font-semibold text-slate-400 block">Places Pinned</span>
               <span className="text-sm font-bold text-cyan-400">{spatialStats.totalPinned} / {entries.length}</span>
             </div>
           </div>

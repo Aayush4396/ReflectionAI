@@ -61,15 +61,14 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
     const payload: NotificationDispatchPayload = {
       webhookUrl: webhookUrl.trim() || undefined,
       eventType: 'test_ping',
-      title: 'ReflectAI Notification Engine Connected',
-      summary: 'Your cognitive journaling webhook integration is active and operating securely.',
+      title: 'ReflectAI Companion Connected',
+      summary: 'Your personal reflection journal reminders are active and connected safely.',
       details: [
-        'End-to-end SSRF validation passed',
-        'Payload format verified',
-        'Real-time event triggering armed'
+        'Safe, encrypted webhook connection active',
+        'Ready to send gentle check-ins and action tasks'
       ],
       mood: 'peaceful',
-      locationName: 'Secure Workspace Cloud',
+      locationName: 'Personal Sanctuary',
       timestamp: new Date().toISOString(),
     };
 
@@ -85,8 +84,8 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
         setTestResult({
           success: true,
           message: data.mode === 'simulated' 
-            ? 'Test signal processed in verified Demo Sandbox mode! (Provide a real Slack or Discord webhook for live delivery).' 
-            : `Successfully delivered event payload to ${data.platform || 'webhook endpoint'}!`,
+            ? 'Test reminder processed in verified Demo Sandbox mode! (Provide a real Slack or Discord webhook for live delivery).' 
+            : `Successfully delivered test reminder to ${data.platform || 'your channel'}!`,
           platform: data.platform || (data.mode === 'simulated' ? 'Demo Sandbox' : 'Webhook'),
         });
 
@@ -103,13 +102,13 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
       } else {
         setTestResult({
           success: false,
-          message: data.error || 'Webhook dispatch failed. Please verify the URL.',
+          message: data.error || 'Connection failed. Please check the webhook link and retry.',
         });
       }
     } catch (err: any) {
       setTestResult({
         success: false,
-        message: err?.message || 'Network error occurred while calling notification proxy.',
+        message: err?.message || 'Network error occurred while connecting. Please retry.',
       });
     } finally {
       setIsTesting(false);
@@ -127,13 +126,13 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
             </div>
             <div>
               <h2 className="text-sm font-bold text-white flex items-center gap-2">
-                <span>External Notification System</span>
+                <span>Connect Slack or Discord</span>
                 <span className="px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider bg-emerald-950 text-emerald-300 rounded border border-emerald-800">
-                  SSRF Protected
+                  Verified Safe Connection
                 </span>
               </h2>
               <p className="text-[11px] text-slate-400">
-                Dispatch structured alerts to Slack, Discord, or automated webhook sinks.
+                Receive gentle reminders and action items directly in your messaging app.
               </p>
             </div>
           </div>
@@ -151,7 +150,7 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
           {/* Webhook Input */}
           <div>
             <label className="block text-slate-300 font-semibold mb-1">
-              Webhook Endpoint URL (Slack / Discord / HTTPS API)
+              Paste Slack or Discord Webhook Link
             </label>
             <input
               type="url"
@@ -161,14 +160,14 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
               className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-xl text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500"
             />
             <span className="text-[10px] text-slate-400 mt-1 block">
-              Leave blank to run in simulated sandbox mode for quick testing without credentials.
+              Leave blank to try in Demo Sandbox mode first without needing a webhook URL.
             </span>
           </div>
 
           {/* Trigger Toggles */}
           <div className="space-y-2 pt-2">
             <span className="block text-[11px] font-bold uppercase tracking-wider text-slate-400">
-              Notification Trigger Criteria
+              What Would You Like to Receive?
             </span>
 
             <label className="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 cursor-pointer hover:bg-slate-800/40 transition-colors">
@@ -179,9 +178,9 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
                 className="mt-0.5 rounded border-slate-700 text-indigo-600 focus:ring-indigo-500"
               />
               <div>
-                <span className="font-semibold text-slate-200 block">Extracted Action Items</span>
+                <span className="font-semibold text-slate-200 block">Action steps from my reflections</span>
                 <span className="text-[11px] text-slate-400">
-                  Send newly synthesized tasks and actionable steps to your channel whenever an entry is summarized.
+                  Send practical next steps and reminders to your channel whenever you explore action plans.
                 </span>
               </div>
             </label>
@@ -194,9 +193,9 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
                 className="mt-0.5 rounded border-slate-700 text-indigo-600 focus:ring-indigo-500"
               />
               <div>
-                <span className="font-semibold text-slate-200 block">High Anxiety or Distress Alert</span>
+                <span className="font-semibold text-slate-200 block">Gentle check-ins when feeling anxious or overwhelmed</span>
                 <span className="text-[11px] text-slate-400">
-                  Trigger supportive check-in ping and therapeutic coping cards when emotional strain is detected.
+                  Receive a warm, supportive check-in ping and grounding tips when you log high emotional strain.
                 </span>
               </div>
             </label>
@@ -209,9 +208,9 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
                 className="mt-0.5 rounded border-slate-700 text-indigo-600 focus:ring-indigo-500"
               />
               <div>
-                <span className="font-semibold text-slate-200 block">Reflection Consistency Milestones</span>
+                <span className="font-semibold text-slate-200 block">Celebrate weekly streaks and milestones</span>
                 <span className="text-[11px] text-slate-400">
-                  Celebrate 3-day and 7-day reflection streaks with positive cognitive reinforcement.
+                  Get cheered on when you hit 3-day and 7-day reflection consistency milestones.
                 </span>
               </div>
             </label>
@@ -231,18 +230,18 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
               )}
               <div>
                 <span className="font-bold block">
-                  {testResult.success ? 'Dispatch Test Successful' : 'Dispatch Test Failed'}
+                  {testResult.success ? 'Connection Ready!' : 'Connection Check Failed'}
                 </span>
                 <span className="text-[11px] opacity-90">{testResult.message}</span>
               </div>
             </div>
           )}
 
-          {/* SSRF Security Guarantee Note */}
+          {/* Privacy Guarantee Note */}
           <div className="flex items-center gap-2 p-2.5 bg-indigo-950/30 border border-indigo-900/50 rounded-xl text-[11px] text-indigo-300">
-            <ShieldCheck className="w-4 h-4 text-indigo-400 shrink-0" />
+            <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>
-              All external requests are sanitized by server-side proxies. Localhost, loopbacks, and private IP blocks are strictly quarantined.
+              <strong>Private &amp; Secure:</strong> Your personal diary entries are never sent to external apps—only high-level action items and gentle check-ins that you authorize.
             </span>
           </div>
         </div>
@@ -266,12 +265,12 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
             {isTesting ? (
               <>
                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                <span>Dispatching Test Event...</span>
+                <span>Sending Test Reminder...</span>
               </>
             ) : (
               <>
                 <Send className="w-3.5 h-3.5" />
-                <span>Save & Test Webhook</span>
+                <span>Send Test Reminder</span>
               </>
             )}
           </button>

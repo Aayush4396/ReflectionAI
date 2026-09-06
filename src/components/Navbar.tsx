@@ -87,9 +87,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                   ? 'bg-indigo-600 text-white shadow-xs shadow-indigo-600/30'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
               }`}
+              title="Personal Reflection Insights & Mindset Trends"
             >
               <TrendingUp className="w-3.5 h-3.5" />
-              <span>Analytics</span>
+              <span>Insights</span>
             </button>
 
             <button
@@ -101,26 +102,28 @@ export const Navbar: React.FC<NavbarProps> = ({
                   ? 'bg-cyan-600 text-white shadow-xs shadow-cyan-600/30'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
               }`}
-              title="Geographic Mindset Atlas"
+              title="Places & Travel Memories"
             >
               <Globe className="w-3.5 h-3.5" />
-              <span>Atlas</span>
+              <span>Places</span>
             </button>
 
-            <button
-              id="tab-btn-admin"
-              type="button"
-              onClick={() => onChangeTab('admin')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
-                activeTab === 'admin'
-                  ? 'bg-rose-600 text-white shadow-xs shadow-rose-600/30'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-              }`}
-              title="System Admin & RBAC Telemetry"
-            >
-              <ShieldAlert className="w-3.5 h-3.5" />
-              <span>Admin</span>
-            </button>
+            {user.role === 'admin' && (
+              <button
+                id="tab-btn-admin"
+                type="button"
+                onClick={() => onChangeTab('admin')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
+                  activeTab === 'admin'
+                    ? 'bg-rose-600 text-white shadow-xs shadow-rose-600/30'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                }`}
+                title="System Admin Console"
+              >
+                <ShieldAlert className="w-3.5 h-3.5" />
+                <span>Admin</span>
+              </button>
+            )}
           </nav>
         </div>
 
@@ -157,10 +160,10 @@ export const Navbar: React.FC<NavbarProps> = ({
               type="button"
               onClick={onOpenNotifications}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-300 bg-slate-800/80 hover:bg-slate-700 border border-slate-700/60 rounded-xl transition-all cursor-pointer shadow-xs"
-              title="External Webhook Notifications (Slack/Discord)"
+              title="Connect Slack or Discord for gentle reminders"
             >
               <Bell className="w-3.5 h-3.5 text-amber-400" />
-              <span>Alerts</span>
+              <span>Connected Apps</span>
             </button>
           )}
 

@@ -1,0 +1,11 @@
+.gcloudignore
+.git
+.gitignore
+.githooks
+node_modules/
+dist/
+coverage/
+.agents/
+tests/
+*.log
+!firebase-applet-config.json

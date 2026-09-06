@@ -1,0 +1,7 @@
+node_modules
+.git
+.githooks
+.agents
+tests
+dist
+*.log

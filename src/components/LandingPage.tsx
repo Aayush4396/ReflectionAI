@@ -36,8 +36,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           onClick={onOpenThreatModel}
           className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-medium text-slate-300 bg-slate-900/80 border border-slate-700/80 rounded-full hover:bg-slate-800 hover:text-white transition-all shadow-xs backdrop-blur-md cursor-pointer"
         >
-          <Shield className="w-3.5 h-3.5 text-emerald-400" />
-          <span>Security &amp; Threat Model</span>
+          <Lock className="w-3.5 h-3.5 text-emerald-400" />
+          <span>Your Privacy Promise</span>
         </button>
       </header>
 
@@ -46,7 +46,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         {/* Eyebrow badge */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-indigo-950/80 border border-indigo-800/70 text-indigo-300 text-xs font-medium rounded-full mb-6 shadow-xs backdrop-blur-md">
           <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-          <span>Thoughtful AI Reflection &amp; Private Journaling</span>
+          <span>Thoughtful Reflection &amp; Private Journaling</span>
         </div>
 
         {/* Display Title */}
@@ -56,7 +56,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
         {/* Subtitle */}
         <p className="mt-5 text-base sm:text-lg text-slate-400 max-w-2xl font-light leading-relaxed">
-          Write journal entries, explore thoughtful inquiries, and converse with an empathetic AI reflection companion. All reflections remain strictly private to your personal account.
+          Write journal entries, explore thoughtful questions, and converse with an empathetic reflection companion. Everything you write stays strictly private to you.
         </p>
 
         {/* Error Banner */}
@@ -114,9 +114,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <div className="w-9 h-9 rounded-xl bg-indigo-950/80 text-indigo-400 flex items-center justify-center border border-indigo-800/60 shadow-xs">
               <Brain className="w-4 h-4" />
             </div>
-            <h3 className="text-sm font-semibold text-slate-100">Guided AI Reflection Partner</h3>
+            <h3 className="text-sm font-semibold text-slate-100">Guided Reflection Companion</h3>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Explore your thoughts through multiple lenses: Socratic questioning, structured summaries, creative brainstorming, and actionable next steps.
+              Explore your thoughts through gentle questions, clear summaries, fresh angles, and practical next steps whenever you need clarity.
             </p>
           </div>
 
@@ -124,9 +124,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <div className="w-9 h-9 rounded-xl bg-emerald-950/80 text-emerald-400 flex items-center justify-center border border-emerald-800/60 shadow-xs">
               <Lock className="w-4 h-4" />
             </div>
-            <h3 className="text-sm font-semibold text-slate-100">Strict Privacy &amp; Protection</h3>
+            <h3 className="text-sm font-semibold text-slate-100">Complete Privacy &amp; Safety</h3>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Your reflections belong solely to you. Complete account-level data isolation guarantees no other user can access your private journals.
+              Your thoughts belong solely to you. Your writings are never shared, never sold, and never used to train public AI models.
             </p>
           </div>
 
@@ -134,9 +134,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <div className="w-9 h-9 rounded-xl bg-cyan-950/80 text-cyan-400 flex items-center justify-center border border-cyan-800/60 shadow-xs">
               <Cloud className="w-4 h-4" />
             </div>
-            <h3 className="text-sm font-semibold text-slate-100">Real-Time Cloud Sync</h3>
+            <h3 className="text-sm font-semibold text-slate-100">Everywhere With You</h3>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Seamlessly access your thoughts anywhere. Filter entries by mood, search tags, pin key insights, and revisit your growth anytime.
+              Access your thoughts securely on any device. Search by feelings, tag meaningful themes, and celebrate your personal growth over time.
             </p>
           </div>
         </div>
@@ -146,9 +146,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       <footer className="w-full max-w-6xl mx-auto px-6 py-6 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-3 relative z-10">
         <div className="flex items-center gap-2">
           <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-          <span>Secure Google authentication with private encrypted cloud storage.</span>
+          <span>Protected by secure Google authentication with bank-grade cloud encryption.</span>
         </div>
-        <p>&copy; {new Date().getFullYear()} ReflectAI. All personal entries encrypted &amp; isolated.</p>
+        <p>&copy; {new Date().getFullYear()} ReflectAI. 100% Private, encrypted, and personal to you.</p>
       </footer>
     </div>
   );

@@ -214,7 +214,7 @@ export const EntryHistory: React.FC<EntryHistoryProps> = ({
           </div>
         </div>
 
-        {/* Mode Selector: Keyword vs AI Semantic Search */}
+        {/* Mode Selector: Word Search vs Feeling / Idea Search */}
         <div className="flex items-center justify-between gap-2 pt-0.5">
           <div className="flex items-center gap-1 p-0.5 bg-slate-900 border border-slate-800 rounded-lg">
             <button
@@ -229,7 +229,7 @@ export const EntryHistory: React.FC<EntryHistoryProps> = ({
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              Exact Keyword
+              Word Search
             </button>
             <button
               type="button"
@@ -243,15 +243,15 @@ export const EntryHistory: React.FC<EntryHistoryProps> = ({
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              <BrainCircuit className="w-3 h-3 text-cyan-300" />
-              <span>AI Semantic Search</span>
+              <Sparkles className="w-3 h-3 text-cyan-300" />
+              <span>Search by Feeling or Idea</span>
             </button>
           </div>
 
           {isSemanticMode && (
             <span className="text-[10px] text-cyan-300 font-medium flex items-center gap-1">
               <Sparkles className="w-3 h-3" />
-              <span>Conceptual Match</span>
+              <span>Understanding Meaning</span>
             </span>
           )}
         </div>
@@ -259,19 +259,15 @@ export const EntryHistory: React.FC<EntryHistoryProps> = ({
         {/* Search Bar Input */}
         <div className="relative flex items-center gap-1.5">
           <div className="relative flex-1">
-            {isSemanticMode ? (
-              <BrainCircuit className="w-4 h-4 text-cyan-400 absolute left-3 top-1/2 -translate-y-1/2" />
-            ) : (
-              <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
-            )}
+            <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
 
             <input
               id="input-history-search"
               type="text"
               placeholder={
                 isSemanticMode 
-                  ? "Describe concept: e.g. 'feeling overwhelmed with project deadlines'..." 
-                  : "Search keywords, titles, tags..."
+                  ? "Describe feeling: e.g. 'feeling overwhelmed by work' or 'peaceful morning walk'..." 
+                  : "Search words, titles, tags..."
               }
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -323,7 +319,7 @@ export const EntryHistory: React.FC<EntryHistoryProps> = ({
           <div className="p-2.5 bg-cyan-950/30 border border-cyan-800/60 rounded-xl text-xs text-cyan-200 flex items-start justify-between gap-2">
             <div className="space-y-0.5">
               <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider block">
-                Semantic Insight:
+                Understanding Your Search:
               </span>
               <p className="text-[11px] text-cyan-100">{semanticExplanation}</p>
             </div>
@@ -473,7 +469,7 @@ export const EntryHistory: React.FC<EntryHistoryProps> = ({
                     <div className="flex items-center justify-between text-[10px]">
                       <span className="font-bold text-cyan-300 flex items-center gap-1">
                         <Sparkles className="w-3 h-3 text-cyan-400" />
-                        <span>Semantic Relevance</span>
+                        <span>Feeling &amp; Meaning Match</span>
                       </span>
                       <span className="font-mono font-bold text-cyan-200 bg-cyan-900/60 px-1.5 py-0.2 rounded border border-cyan-700/60">
                         {semanticMatch.relevanceScore}% Match

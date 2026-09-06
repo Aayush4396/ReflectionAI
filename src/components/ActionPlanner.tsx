@@ -164,8 +164,8 @@ export const ActionPlanner: React.FC<ActionPlannerProps> = ({
             <ListCheck className="w-4 h-4" />
           </div>
           <div>
-            <h4 className="text-xs font-bold text-white tracking-tight">Actionable Steps &amp; Calendar Export</h4>
-            <p className="text-[10px] text-slate-400">Convert reflective breakthroughs into concrete calendar tasks.</p>
+            <h4 className="text-xs font-bold text-white tracking-tight">Turn Thoughts into Next Steps</h4>
+            <p className="text-[10px] text-slate-400">Transform your reflections into simple, practical actions you can take today.</p>
           </div>
         </div>
 
@@ -180,12 +180,12 @@ export const ActionPlanner: React.FC<ActionPlannerProps> = ({
             {isExtracting ? (
               <>
                 <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                <span>Synthesizing Tasks...</span>
+                <span>Finding Next Steps...</span>
               </>
             ) : (
               <>
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>Extract Action Items</span>
+                <span>Find Next Steps</span>
               </>
             )}
           </button>
@@ -196,10 +196,10 @@ export const ActionPlanner: React.FC<ActionPlannerProps> = ({
               type="button"
               onClick={downloadIcsFile}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl transition-colors cursor-pointer"
-              title="Export all action tasks as an .ICS Calendar File"
+              title="Add tasks to Apple Calendar, Google Calendar, or Outlook (.ics)"
             >
               <Download className="w-3.5 h-3.5 text-cyan-400" />
-              <span className="hidden sm:inline">Export .ICS</span>
+              <span className="hidden sm:inline">Add to Calendar</span>
             </button>
           )}
         </div>
@@ -214,7 +214,7 @@ export const ActionPlanner: React.FC<ActionPlannerProps> = ({
 
       {summary && (
         <div className="p-3 bg-slate-900/90 border border-indigo-900/50 rounded-xl text-xs text-indigo-200 leading-relaxed">
-          <strong className="text-white block mb-0.5">Commitment Focus:</strong>
+          <strong className="text-white block mb-0.5">Key Takeaway:</strong>
           {summary}
         </div>
       )}
@@ -223,7 +223,7 @@ export const ActionPlanner: React.FC<ActionPlannerProps> = ({
       <div className="space-y-2">
         {items.length === 0 ? (
           <p className="text-xs text-slate-500 py-3 text-center">
-            No action items generated yet. Click "Extract Action Items" to synthesize actionable tasks from your notes.
+            No action steps created yet. Click "Find Next Steps" to discover practical next actions from your reflection.
           </p>
         ) : (
           items.map((item) => (

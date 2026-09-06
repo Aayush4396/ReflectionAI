@@ -51,11 +51,11 @@ const MOODS: Array<{ value: JournalEntry['mood']; label: string; icon: string; b
 ];
 
 const MODES: Array<{ id: ReflectionMode; label: string; icon: React.FC<{ className?: string }>; description: string }> = [
-  { id: 'socratic', label: 'Socratic Inquiry', icon: Brain, description: 'Thought-provoking questions to challenge assumptions and explore depth.' },
-  { id: 'summary', label: 'Summary & Insights', icon: FileText, description: 'Structured executive summary with core themes and takeaways.' },
-  { id: 'brainstorm', label: 'Brainstorm Ideas', icon: Lightbulb, description: 'Creative perspectives, divergent alternatives, and fresh angles.' },
-  { id: 'action_items', label: 'Actionable Steps', icon: ListCheck, description: 'Clear micro-actions to turn reflections into progress.' },
-  { id: 'empathy', label: 'Mindful Grounding', icon: HeartHandshake, description: 'Empathetic validation and mindful emotional support.' },
+  { id: 'socratic', label: 'Thoughtful Questions', icon: Brain, description: 'Gentle, thought-provoking questions to help you explore your thoughts deeper.' },
+  { id: 'summary', label: 'Summary & Takeaways', icon: FileText, description: 'A clear, structured overview of what you wrote with key takeaways.' },
+  { id: 'brainstorm', label: 'Fresh Perspectives', icon: Lightbulb, description: 'New creative angles and alternative viewpoints to consider.' },
+  { id: 'action_items', label: 'Action Steps', icon: ListCheck, description: 'Clear, practical micro-steps to turn reflection into progress.' },
+  { id: 'empathy', label: 'Mindful Support', icon: HeartHandshake, description: 'Empathetic validation and warm, compassionate emotional presence.' },
 ];
 
 const PROMPT_STARTERS = [
@@ -516,14 +516,14 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-200">
               <Sparkles className="w-4 h-4 text-indigo-400" />
-              <span>Choose Reflection Lens:</span>
+              <span>Choose Conversation Style:</span>
             </div>
             <span className="text-[10px] text-emerald-400 bg-emerald-950/80 border border-emerald-800/60 px-2 py-0.5 rounded font-medium">
-              AI Ready
+              Companion Ready
             </span>
           </div>
 
-          {/* Lens Selector Buttons */}
+          {/* Style Selector Buttons */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
             {MODES.map((m) => {
               const Icon = m.icon;
@@ -555,7 +555,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
           {/* Trigger Reflection Button */}
           <div className="flex items-center justify-between pt-1">
             <p className="text-[11px] text-slate-400">
-              Your AI companion will process your thoughts and share insights.
+              Your reflection companion will listen, support, and share thoughtful insights.
             </p>
 
             <button
@@ -568,12 +568,12 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
               {isAiLoading ? (
                 <>
                   <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                  <span>Generating Reflections...</span>
+                  <span>Reflecting on your thoughts...</span>
                 </>
               ) : (
                 <>
                   <Sparkles className="w-3.5 h-3.5" />
-                  <span>Reflect with AI</span>
+                  <span>Reflect with Companion</span>
                 </>
               )}
             </button>
@@ -612,7 +612,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
                         ) : (
                           <div className="flex items-center gap-1.5 text-indigo-300">
                             <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-                            <span>AI Reflection</span>
+                            <span>Reflection Companion</span>
                             {msg.mode && (
                               <span className="px-1.5 py-0.5 bg-indigo-900/60 border border-indigo-700/50 text-[10px] rounded text-indigo-300 uppercase font-mono">
                                 {msg.mode}
